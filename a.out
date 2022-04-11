@@ -1,0 +1,98 @@
+#! /usr/share/iverilog-0.10.0/bin/vvp
+:ivl_version "0.10.0 (devel)" "(v0_9_6)";
+:ivl_delay_selection "TYPICAL";
+:vpi_time_precision - 12;
+:vpi_module "system";
+:vpi_module "vhdl_sys";
+:vpi_module "v2005_math";
+:vpi_module "va_math";
+:vpi_module "v2009";
+S_0x1a4d7b0 .scope module, "blocking_tb" "blocking_tb" 2 2;
+ .timescale -9 -12;
+P_0x1a4d930 .param/real "DUTY_CYCLE" 0 2 8, Cr<m4000000000000000gfc1>; value=0.500000
+P_0x1a4d970 .param/l "OFFSET" 0 2 9, +C4<0>;
+P_0x1a4d9b0 .param/l "PERIOD" 0 2 7, +C4<010100>;
+v0x1a63c30_0 .var "a_i", 0 0;
+v0x1a63cf0_0 .net "a_o", 0 0, L_0x1a64150;  1 drivers
+v0x1a63dc0_0 .var "b_i", 0 0;
+v0x1a63ec0_0 .net "b_o", 0 0, L_0x1a64210;  1 drivers
+v0x1a63f90_0 .var "clk", 0 0;
+v0x1a64080_0 .var "rst_n", 0 0;
+S_0x1a4fe60 .scope module, "nonblocking_tb" "nonblocking" 2 32, 3 1 0, S_0x1a4d7b0;
+ .timescale 0 0;
+    .port_info 0 /INPUT 1 "clk"
+    .port_info 1 /INPUT 1 "rst_n"
+    .port_info 2 /INPUT 1 "a_i"
+    .port_info 3 /INPUT 1 "b_i"
+    .port_info 4 /OUTPUT 1 "a_o"
+    .port_info 5 /OUTPUT 1 "b_o"
+L_0x1a64150 .functor BUFZ 1, v0x1a50080_0, C4<0>, C4<0>, C4<0>;
+L_0x1a64210 .functor BUFZ 1, v0x1a63720_0, C4<0>, C4<0>, C4<0>;
+v0x1a50080_0 .var "a", 0 0;
+v0x1a63590_0 .net "a_i", 0 0, v0x1a63c30_0;  1 drivers
+v0x1a63650_0 .net "a_o", 0 0, L_0x1a64150;  alias, 1 drivers
+v0x1a63720_0 .var "b", 0 0;
+v0x1a637e0_0 .net "b_i", 0 0, v0x1a63dc0_0;  1 drivers
+v0x1a638f0_0 .net "b_o", 0 0, L_0x1a64210;  alias, 1 drivers
+v0x1a639b0_0 .net "clk", 0 0, v0x1a63f90_0;  1 drivers
+v0x1a63a70_0 .net "rst_n", 0 0, v0x1a64080_0;  1 drivers
+E_0x1a4e410/0 .event negedge, v0x1a63a70_0;
+E_0x1a4e410/1 .event posedge, v0x1a639b0_0;
+E_0x1a4e410 .event/or E_0x1a4e410/0, E_0x1a4e410/1;
+    .scope S_0x1a4fe60;
+T_0 ;
+    %wait E_0x1a4e410;
+    %load/v 8, v0x1a63a70_0, 1;
+    %inv 8, 1;
+    %jmp/0xz  T_0.0, 8;
+    %load/v 8, v0x1a63590_0, 1;
+    %ix/load 0, 1, 0;
+    %assign/v0 v0x1a50080_0, 0, 8;
+    %load/v 8, v0x1a637e0_0, 1;
+    %ix/load 0, 1, 0;
+    %assign/v0 v0x1a63720_0, 0, 8;
+    %jmp T_0.1;
+T_0.0 ;
+    %load/v 8, v0x1a63720_0, 1;
+    %ix/load 0, 1, 0;
+    %assign/v0 v0x1a50080_0, 0, 8;
+    %load/v 8, v0x1a50080_0, 1;
+    %ix/load 0, 1, 0;
+    %assign/v0 v0x1a63720_0, 0, 8;
+T_0.1 ;
+    %jmp T_0;
+    .thread T_0;
+    .scope S_0x1a4d7b0;
+T_1 ;
+    %delay 0, 0;
+T_1.0 ;
+    %set/v v0x1a63f90_0, 0, 1;
+    %delay 10000, 0;
+    %set/v v0x1a63f90_0, 1, 1;
+    %delay 10000, 0;
+    %jmp T_1.0;
+    %end;
+    .thread T_1;
+    .scope S_0x1a4d7b0;
+T_2 ;
+    %set/v v0x1a64080_0, 0, 1;
+    %set/v v0x1a63c30_0, 1, 1;
+    %set/v v0x1a63dc0_0, 0, 1;
+    %delay 5000, 0;
+    %set/v v0x1a64080_0, 1, 1;
+    %delay 100000, 0;
+    %vpi_call/w 2 26 "$finish" {0 0};
+    %end;
+    .thread T_2;
+    .scope S_0x1a4d7b0;
+T_3 ;
+    %vpi_call/w 2 29 "$dumpfile", "nonblocking.vcd" {0 0};
+    %vpi_call/w 2 30 "$dumpvars", 1'sb0, S_0x1a4fe60 {0 0};
+    %end;
+    .thread T_3;
+# The file index is used to find the file name in the following table.
+:file_names 4;
+    "N/A";
+    "<interactive>";
+    "testbench.sv";
+    "design.sv";
